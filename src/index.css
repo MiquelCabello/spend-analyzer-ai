@@ -2,41 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Corporate Expense Management Design System */
+/* All colors are in HSL format for consistency */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    /* Corporate Blue Palette */
+    --primary: 215 76% 35%;           /* Professional navy blue */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 215 76% 45%;
+    --primary-dark: 215 76% 25%;
+    
+    /* Success/Approval Colors */
+    --success: 142 76% 36%;           /* Forest green */
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 46%;
+    
+    /* Warning/Pending Colors */
+    --warning: 38 92% 50%;            /* Amber */
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 38 92% 60%;
+    
+    /* Error/Rejection Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 0 84% 70%;
+    
+    /* Neutral Grays */
+    --background: 220 14% 96%;        /* Light gray background */
+    --foreground: 224 71% 4%;         /* Near black text */
+    
+    --card: 0 0% 100%;                /* Pure white cards */
+    --card-foreground: 224 71% 4%;
+    
+    --secondary: 215 25% 92%;         /* Light blue-gray */
+    --secondary-foreground: 215 25% 16%;
+    
+    --muted: 215 25% 88%;             /* Muted gray */
+    --muted-foreground: 215 15% 40%;
+    
+    --accent: 215 76% 35%;            /* Same as primary */
+    --accent-foreground: 0 0% 100%;
+    
+    /* Interactive Elements */
+    --border: 215 25% 82%;
+    --input: 215 25% 82%;
+    --ring: 215 76% 35%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 224 71% 4%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Spacing & Sizing */
+    --radius: 0.75rem;
+    
+    /* Corporate Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(215 76% 35%), hsl(215 76% 45%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(215 25% 98%));
+    --gradient-dashboard: linear-gradient(135deg, hsl(220 14% 96%), hsl(215 25% 92%));
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(215 76% 35% / 0.1);
+    --shadow-md: 0 4px 12px -2px hsl(215 76% 35% / 0.15);
+    --shadow-lg: 0 10px 25px -5px hsl(215 76% 35% / 0.1), 0 4px 6px -4px hsl(215 76% 35% / 0.05);
+    --shadow-xl: 0 20px 40px -12px hsl(215 76% 35% / 0.25);
+    
+    /* Typography */
+    --font-corporate: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Animations */
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +136,103 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  /* Corporate Card Styles */
+  .card-corporate {
+    @apply bg-gradient-to-br from-white to-slate-50 border-0 shadow-md;
+  }
+  
+  .card-dashboard {
+    @apply bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 shadow-lg;
+  }
+  
+  /* Status Badges */
+  .status-pending {
+    @apply bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 border border-amber-300;
+  }
+  
+  .status-approved {
+    @apply bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 border border-emerald-300;
+  }
+  
+  .status-rejected {
+    @apply bg-gradient-to-r from-red-100 to-red-200 text-red-800 border border-red-300;
+  }
+  
+  /* Button Variants */
+  .btn-corporate {
+    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200;
+  }
+  
+  .btn-success {
+    @apply bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200;
+  }
+  
+  /* Table Styles */
+  .table-corporate {
+    @apply bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl shadow-sm;
+  }
+  
+  .table-header {
+    @apply bg-gradient-to-r from-slate-50 to-slate-100 text-slate-700 font-semibold;
+  }
+  
+  /* Form Inputs */
+  .input-corporate {
+    @apply bg-white/90 backdrop-blur-sm border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200;
+  }
+  
+  /* Navigation */
+  .nav-corporate {
+    @apply bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm;
+  }
+  
+  /* Animations */
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Euro currency formatting */
+.currency-eur::before {
+  content: '€ ';
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .mobile-full {
+    @apply w-full;
+  }
+  
+  .mobile-hide {
+    @apply hidden;
   }
 }
