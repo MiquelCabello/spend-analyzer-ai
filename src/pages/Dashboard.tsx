@@ -208,15 +208,15 @@ const Dashboard = () => {
                 <Button variant="ghost" className="text-slate-600 hover:text-primary">
                   Dashboard
                 </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary">
+                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/expenses')}>
                   <Receipt className="w-4 h-4 mr-2" />
                   Gastos
                 </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary">
+                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/upload')}>
                   <Upload className="w-4 h-4 mr-2" />
                   Subir Ticket
                 </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary">
+                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/analytics')}>
                   <BarChart3 className="w-4 h-4 mr-2" />
                   Analíticas
                 </Button>
