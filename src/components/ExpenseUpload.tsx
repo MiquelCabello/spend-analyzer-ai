@@ -336,7 +336,7 @@ const ExpenseUpload = () => {
         amount_gross: parseFloat(formData.amount_gross),
         currency: formData.currency,
         category_id: formData.category_id,
-        project_code_id: formData.project_code_id || null,
+        project_code_id: formData.project_code_id && formData.project_code_id !== 'none' ? formData.project_code_id : null,
         payment_method: formData.payment_method as 'CARD' | 'CASH' | 'TRANSFER' | 'OTHER',
         notes: formData.notes || null,
         receipt_file_id: fileId,
@@ -640,7 +640,7 @@ const ExpenseUpload = () => {
                   <SelectValue placeholder="Selecciona un proyecto (opcional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sin proyecto</SelectItem>
+                  <SelectItem value="none">Sin proyecto</SelectItem>
                   {projectCodes.map((project) => (
                     <SelectItem key={project.id} value={project.id}>
                       {project.code} - {project.name}
