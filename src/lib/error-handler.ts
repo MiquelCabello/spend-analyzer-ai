@@ -1,4 +1,5 @@
 import { toast } from "@/components/ui/use-toast";
+import { Logger } from '@/lib/logger';
 
 export interface AppError {
   message: string;
@@ -8,7 +9,7 @@ export interface AppError {
 
 export class ErrorHandler {
   static handle(error: unknown, context?: string): AppError {
-    console.error(`Error in ${context || 'application'}:`, error);
+    Logger.error(`Error in ${context || 'application'}`, error);
 
     let message = 'Ha ocurrido un error inesperado';
     let code = 'UNKNOWN_ERROR';
@@ -31,6 +32,8 @@ export class ErrorHandler {
   }
 
   static handleAuthError(error: unknown): AppError {
+    Logger.warn('Authentication error', { error });
+    
     if (typeof error === 'object' && error !== null && 'message' in error) {
       const authError = error as { message: string };
       
@@ -57,6 +60,8 @@ export class ErrorHandler {
   }
 
   static handleDatabaseError(error: unknown): AppError {
+    Logger.error('Database error', error);
+    
     if (typeof error === 'object' && error !== null && 'message' in error) {
       const dbError = error as { message: string };
       

@@ -9,6 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Receipt, Eye, EyeOff, ArrowLeft, Loader2, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Logger } from "@/lib/logger";
+import { ClientRateLimiter } from "@/lib/rate-limiter";
+import { SecurityUtils } from "@/lib/security";
 
 const Auth = () => {
   const [loading, setLoading] = useState(false);
@@ -31,16 +34,27 @@ const Auth = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Rate limiting check
+    if (!ClientRateLimiter.isAllowed('/auth/signin', ClientRateLimiter.configs.auth)) {
+      const remainingTime = Math.ceil(ClientRateLimiter.getRemainingTime('/auth/signin') / 1000 / 60);
+      setError(`Demasiados intentos de login. Intenta en ${remainingTime} minutos.`);
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
     try {
+      Logger.info('Attempting sign in', { email: formData.email });
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
+        email: SecurityUtils.sanitizeInput(formData.email),
         password: formData.password,
       });
 
       if (error) {
+        Logger.warn('Sign in failed', { error: error.message, email: formData.email });
         if (error.message.includes('Invalid login credentials')) {
           setError('Email o contraseña incorrectos');
         } else {
@@ -50,6 +64,7 @@ const Auth = () => {
       }
 
       if (data.user) {
+        Logger.info('Sign in successful', { userId: data.user.id });
         toast({
           title: "¡Bienvenido!",
           description: "Has iniciado sesión correctamente",
@@ -57,8 +72,8 @@ const Auth = () => {
         navigate('/dashboard');
       }
     } catch (err) {
+      Logger.error('Sign in error', err, { email: formData.email });
       setError('Error inesperado. Por favor, inténtalo de nuevo.');
-      console.error('Sign in error:', err);
     } finally {
       setLoading(false);
     }
@@ -77,25 +92,35 @@ const Auth = () => {
       return;
     }
 
+    // Rate limiting check
+    if (!ClientRateLimiter.isAllowed('/auth/signup', ClientRateLimiter.configs.auth)) {
+      const remainingTime = Math.ceil(ClientRateLimiter.getRemainingTime('/auth/signup') / 1000 / 60);
+      setError(`Demasiados intentos de registro. Intenta en ${remainingTime} minutos.`);
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
+      Logger.info('Attempting sign up', { email: formData.email, name: formData.name });
+      
       const redirectUrl = `${window.location.origin}/dashboard`;
       
       const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
+        email: SecurityUtils.sanitizeInput(formData.email),
         password: formData.password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            name: formData.name,
+            name: SecurityUtils.sanitizeInput(formData.name),
             role: 'EMPLOYEE'
           }
         }
       });
 
       if (error) {
+        Logger.warn('Sign up failed', { error: error.message, email: formData.email });
         if (error.message.includes('User already registered')) {
           setError('Ya existe una cuenta con este email');
         } else {
@@ -105,11 +130,13 @@ const Auth = () => {
       }
 
       if (data.user && !data.session) {
+        Logger.info('Sign up successful, email confirmation required', { userId: data.user.id });
         toast({
           title: "¡Registro exitoso!",
           description: "Verifica tu email para completar el registro",
         });
       } else if (data.session) {
+        Logger.info('Sign up successful with session', { userId: data.user?.id });
         toast({
           title: "¡Cuenta creada!",
           description: "Tu cuenta ha sido creada exitosamente",
@@ -117,8 +144,8 @@ const Auth = () => {
         navigate('/dashboard');
       }
     } catch (err) {
+      Logger.error('Sign up error', err, { email: formData.email });
       setError('Error inesperado. Por favor, inténtalo de nuevo.');
-      console.error('Sign up error:', err);
     } finally {
       setLoading(false);
     }
