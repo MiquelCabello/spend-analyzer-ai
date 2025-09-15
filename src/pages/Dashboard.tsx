@@ -193,62 +193,9 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
-      {/* Header */}
-      <header className="nav-corporate">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Receipt className="w-8 h-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">ExpenseAI</h1>
-              </div>
-              
-              <nav className="hidden md:flex space-x-6">
-                <Button variant="ghost" className="text-slate-600 hover:text-primary">
-                  Dashboard
-                </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/expenses')}>
-                  <Receipt className="w-4 h-4 mr-2" />
-                  Gastos
-                </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/upload')}>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Subir Ticket
-                </Button>
-                <Button variant="ghost" className="text-slate-600 hover:text-primary" onClick={() => navigate('/analytics')}>
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Analíticas
-                </Button>
-                {profile?.role === 'ADMIN' && (
-                  <Button variant="ghost" className="text-slate-600 hover:text-primary">
-                    <Users className="w-4 h-4 mr-2" />
-                    Empleados
-                  </Button>
-                )}
-              </nav>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-slate-900">{profile?.name}</p>
-                <Badge variant={profile?.role === 'ADMIN' ? 'default' : 'secondary'} className="text-xs">
-                  {profile?.role === 'ADMIN' ? 'Administrador' : 'Empleado'}
-                </Badge>
-              </div>
-              <Button variant="ghost" size="sm">
-                <Settings className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="p-6">
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main>
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-slate-900 mb-2">

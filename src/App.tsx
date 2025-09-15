@@ -17,8 +17,15 @@ import Employees from "./pages/Employees";
 import NotFound from "./pages/NotFound";
 import { useAuth } from './hooks/useAuth';
 import { Logger } from './lib/logger';
+import { ErrorMonitoring } from './lib/monitoring';
 
 const queryClient = new QueryClient();
+
+// Initialize error monitoring
+ErrorMonitoring.initialize({
+  environment: import.meta.env.DEV ? 'development' : 'production',
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+});
 
 function ProtectedRoutes() {
   const { user, loading } = useAuth();
