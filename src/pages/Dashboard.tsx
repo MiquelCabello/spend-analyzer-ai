@@ -106,7 +106,7 @@ const Dashboard = () => {
           status,
           expense_date,
           categories(name),
-          profiles(name)
+          profiles!expenses_employee_id_fkey(name)
         `);
 
       // If employee, only show their expenses
